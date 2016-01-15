@@ -6,35 +6,89 @@
 })(jQuery, this);
 
 
-jQuery(document).ready(function ($) {
-	
- $(".carousel").each(function () { // обрабатываем каждый слайдер
-  var obj = $(this);
-  $(obj).append("<div class='nav'></div>");
-  $(obj).find(".slide").each(function () {
-   $(obj).find(".nav").append("<span rel='"+$(this).index()+"'></span>"); // добавляем блок навигации
-   $(this).addClass("slider"+$(this).index());
+
+jQuery(document).ready(function(){
+ function htmSlider(){
+  /* Зададим следующие параметры */
+  /* обертка слайдера */
+  var slideWrap = jQuery('.maincontainer');
+  /* кнопки вперед/назад и старт/пауза */
+  var nextLink = jQuery('.next-slide');
+  var prevLink = jQuery('.prev-slide');
+  var playLink = jQuery('.auto');
+  /* Проверка на анимацию */
+  var is_animate = false;
+  /* ширина слайда с отступами */
+  var slideWidth = jQuery('.slide').outerWidth();
+  /* смещение слайдера */
+  var scrollSlider = slideWrap.position().left - slideWidth;
+    
+  /* Клик по ссылке на следующий слайд */
+  nextLink.click(function(){
+   if(!slideWrap.is(':animated')) {
+    slideWrap.animate({left: scrollSlider}, 500, function(){
+     slideWrap
+      .find('.slide:first')
+      .appendTo(slideWrap)
+      .parent()
+      .css({'left': 0});
+    });
+   }
   });
-  $(obj).find("span").first().addClass("on"); // делаем активным первый элемент меню
- });
-function sliderJS (obj, sl) { // slider function
- var ul = $(sl).find(".maincontainer"); // находим блок
- var bl = $(sl).find(".slide.carousel"+obj); // находим любой из элементов блока
- var step = $(bl).width(); // ширина объекта
- $(ul).animate({marginLeft: "-"+step*obj}, 500); // 500 это скорость перемотки
-}
-$(document).on("click", ".slider .nav span", function() { // slider click navigate
- var sl = $(this).closest(".slider"); // находим, в каком блоке был клик
- $(sl).find("span").removeClass("on"); // убираем активный элемент
- $(this).addClass("on"); // делаем активным текущий
- var obj = $(this).attr("rel"); // узнаем его номер
- sliderJS(obj, sl); // слайдим
- return false;
+
+  /* Клик по ссылке на предыдующий слайд */
+  prevLink.click(function(){
+   if(!slideWrap.is(':animated')) {
+    slideWrap
+     .css({'left': scrollSlider})
+     .find('.slide:last')
+     .prependTo(slideWrap)
+     .parent()
+     .animate({left: 0}, 500);
+   }
+  });
+    
+  /* Функция автоматической прокрутки слайдера */
+  function autoplay(){
+   if(!is_animate){
+    is_animate = true;
+    slideWrap.animate({left: scrollSlider}, 500, function(){
+     slideWrap
+      .find('.slide:first')
+      .appendTo(slideWrap)
+      .parent()
+      .css({'left': 0});
+     is_animate = false;
+    });
+   }
+  }
+    
+  /* Клики по ссылкам старт/пауза */
+  playLink.click(function(){
+   if(playLink.hasClass('play')){
+    /* Изменяем клас у кнопки на клас паузы */
+  playLink.removeClass('play').addClass('pause');
+    /* Добавляем кнопкам вперед/назад клас который их скрывает */
+    jQuery('.navy').addClass('disable');
+    /* Инициализируем функцию autoplay() через переменную
+       чтобы потом можно было ее отключить
+  */
+    timer = setInterval(autoplay, 1000);
+   } else {
+    playLink.removeClass('pause').addClass('play');
+  /* показываем кнопки вперед/назад */
+    jQuery('.navy').removeClass('disable');
+    /* Отключаем функцию autoplay() */
+    clearInterval(timer);
+   }
+  });
+
+ }
+ 
+ /* иницилизируем функцию слайдера */
+ htmSlider();
 });
 
-
-
-});
 
 
 

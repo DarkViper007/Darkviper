@@ -63,5 +63,10 @@
 
 						?>
 				</div>
+				
 
-			</div>				
+			<div class="clear"></div>
+  </div>
+  <div name="prev" class="navy prev-slide"></div>
+  <div name="next" class="navy next-slide"></div>
+  <div class="auto play"></div>				
