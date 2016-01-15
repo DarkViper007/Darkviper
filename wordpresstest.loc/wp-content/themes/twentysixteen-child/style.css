@@ -1,0 +1,11 @@
+/*
+Theme Name:     Twenty Sixteen Child
+Theme URI:      http: //example.com/
+Description:    Дочерняя тема для темы Twenty Sixteen 
+Author:         Mihail DV
+Author URI:     http: //example.com/about/
+Template:       twentysixteen
+Version:        0.1.0
+*/
+
+@import url("../twentysixteen/style.css");
